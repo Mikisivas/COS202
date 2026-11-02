@@ -1,0 +1,101 @@
+digraph SCAPMS {
+  graph [rankdir=BT, fontname="Helvetica", fontsize=11, nodesep=0.35, ranksep=0.6, label="SCAPMS UML Class Diagram (namespaces scapms::model, scapms::controller, scapms::gui, scapms::utils)", labelloc=t, fontsize=14];
+  node  [shape=plaintext, fontname="Helvetica", fontsize=9];
+  edge  [fontname="Helvetica", fontsize=8];
+
+  PatientRecord [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#fff8e1">
+    <tr><td bgcolor="#ffe082"><i>&laquo;abstract&raquo;</i><br/><b><i>PatientRecord</i></b></td></tr>
+    <tr><td align="left" balign="left"># id_ : string<br/># name_ : string<br/># age_ : int<br/># contact_ : string<br/># appointmentIds_ : vector&lt;string&gt;</td></tr>
+    <tr><td align="left" balign="left">+ getCategory() : PatientCategory {pure}<br/>+ getPriorityLevel() : int {pure}<br/>+ getPriorityLabel() : string {pure}<br/>+ getDetails() : string {pure}<br/>+ getExtraFields() : vector&lt;string&gt; {pure}<br/>+ clone() : unique_ptr&lt;PatientRecord&gt; {pure}<br/>+ describe() : string {virtual}<br/>+ linkAppointment(id) / unlinkAppointment(id)<br/>+ validateName() / validateAge() / validateContact()</td></tr></table>>];
+
+  Appointable [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#e8f5e9">
+    <tr><td bgcolor="#a5d6a7"><i>&laquo;interface&raquo;</i><br/><b><i>Appointable</i></b></td></tr>
+    <tr><td align="left" balign="left">+ scheduleAppointment(Appointment&amp;) {pure}<br/>+ cancelAppointment(id) {pure}<br/>+ bookingRule() : string {pure}</td></tr></table>>];
+
+  GeneralPatient [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#f1f8e9">
+    <tr><td bgcolor="#dcedc8"><b>GeneralPatient</b></td></tr>
+    <tr><td align="left" balign="left">- symptoms_ : string</td></tr>
+    <tr><td align="left" balign="left">+ getPriorityLabel() = "Normal"<br/>+ scheduleAppointment(): reason defaults to symptoms</td></tr></table>>];
+
+  EmergencyPatient [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#ffebee">
+    <tr><td bgcolor="#ffcdd2"><b>EmergencyPatient</b></td></tr>
+    <tr><td align="left" balign="left">- condition_ : string<br/>- severity_ : int (1-5)</td></tr>
+    <tr><td align="left" balign="left">+ getPriorityLabel() = "High Priority"<br/>+ getSeverityLabel() : string<br/>(not Appointable: uses the queue)</td></tr></table>>];
+
+  FollowUpPatient [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#e3f2fd">
+    <tr><td bgcolor="#bbdefb"><b>FollowUpPatient</b></td></tr>
+    <tr><td align="left" balign="left">- previousDiagnosis_ : string<br/>- lastVisitDate_ : string</td></tr>
+    <tr><td align="left" balign="left">+ getPriorityLabel() = "Scheduled"<br/>+ scheduleAppointment(): date must be after last visit</td></tr></table>>];
+
+  Appointment [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#fafafa">
+    <tr><td bgcolor="#e0e0e0"><b>Appointment</b></td></tr>
+    <tr><td align="left" balign="left">- id_, patientId_ : string<br/>- date_, time_ : string<br/>- doctor_, reason_ : string<br/>- status_ : AppointmentStatus</td></tr>
+    <tr><td align="left" balign="left">+ dateTimeKey() : string<br/>+ setStatus(AppointmentStatus)</td></tr></table>>];
+
+  ClinicDatabase [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#fafafa">
+    <tr><td bgcolor="#e0e0e0"><b>ClinicDatabase</b></td></tr>
+    <tr><td align="left" balign="left">- patients_ : vector&lt;unique_ptr&lt;PatientRecord&gt;&gt;<br/>- appointments_ : vector&lt;Appointment&gt;<br/>- sortedBy_ : SortField</td></tr>
+    <tr><td align="left" balign="left">+ addPatient() / removePatient() / replacePatient()<br/>+ findPatient(id) : PatientRecord*<br/>+ addAppointment() / removeAppointment()</td></tr></table>>];
+
+  ClinicManager [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#ede7f6">
+    <tr><td bgcolor="#d1c4e9"><b>ClinicManager</b></td></tr>
+    <tr><td align="left" balign="left">- db_ : ClinicDatabase<br/>- waitingQueue_ : queue&lt;QueueEntry&gt;<br/>- undoStack_ : stack&lt;AdminAction&gt;<br/>- recentPatients_[10] : PatientRecord*</td></tr>
+    <tr><td align="left" balign="left">+ registerPatient() / updatePatient() / deletePatient()<br/>+ enqueue() / callNextPatient()<br/>+ undoLastOperation() : string<br/>+ sortPatients(algorithm, field) : SortStats<br/>+ triageOverview() : vector&lt;string&gt;<br/>+ saveToFile() / loadFromFile()</td></tr></table>>];
+
+  AppointmentController [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#ede7f6">
+    <tr><td bgcolor="#d1c4e9"><b>AppointmentController</b></td></tr>
+    <tr><td align="left" balign="left">- manager_ : ClinicManager&amp;</td></tr>
+    <tr><td align="left" balign="left">+ schedule() / cancel() / complete() / remove()<br/>+ upcomingReminders(minutes)</td></tr></table>>];
+
+  SearchEngine [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#ede7f6">
+    <tr><td bgcolor="#d1c4e9"><b>SearchEngine</b></td></tr>
+    <tr><td align="left" balign="left">+ linearSearchById() {static}<br/>+ binarySearch() {static}<br/>+ recursiveSearchByName() {static}<br/>+ search(db, field, term, algorithm)</td></tr></table>>];
+
+  Sorter [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#ede7f6">
+    <tr><td bgcolor="#d1c4e9"><b>Sorter</b></td></tr>
+    <tr><td align="left" balign="left">+ insertionSort() / selectionSort() {static}<br/>+ mergeSort() / quickSort() {static, recursive}<br/>+ comparatorFor(SortField)</td></tr></table>>];
+
+  ReportGenerator [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#ede7f6">
+    <tr><td bgcolor="#d1c4e9"><b>ReportGenerator</b></td></tr>
+    <tr><td align="left" balign="left">+ mostFrequentlyAttended()<br/>+ pendingAppointments()<br/>+ categoryDistribution()<br/>+ dailySummary(date)</td></tr></table>>];
+
+  Utils [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#eceff1">
+    <tr><td bgcolor="#cfd8dc"><b>utils</b></td></tr>
+    <tr><td align="left" balign="left">FileHandler (CSV save/load)<br/>IDGenerator (P0001, A0001)<br/>ClinicException &#8592; ValidationException,<br/>  DuplicateIdException, NotFoundException,<br/>  AppointmentException, FileException,<br/>  SearchException</td></tr></table>>];
+
+  MainWindow [label=<<table border="1" cellborder="0" cellspacing="0" bgcolor="#e0f7fa">
+    <tr><td bgcolor="#b2ebf2"><b>MainWindow</b> : QMainWindow</td></tr>
+    <tr><td align="left" balign="left">- manager_ : ClinicManager<br/>- appointments_ : AppointmentController<br/>- reminderTimer_ : QTimer*</td></tr>
+    <tr><td align="left" balign="left">DashboardPanel, PatientPanel, AppointmentPanel,<br/>QueuePanel, SearchPanel, ReportsPanel, AdminPanel<br/>(each a QWidget, signal dataChanged)</td></tr></table>>];
+
+  // Inheritance (hollow triangle)
+  edge [arrowhead=onormal, arrowsize=1.2];
+  GeneralPatient -> PatientRecord;
+  EmergencyPatient -> PatientRecord;
+  FollowUpPatient -> PatientRecord;
+  // Interface realisation (dashed hollow triangle)
+  edge [style=dashed];
+  GeneralPatient -> Appointable;
+  FollowUpPatient -> Appointable;
+
+  // Composition (filled diamond at the owner)
+  edge [style=solid, arrowhead=none, arrowtail=diamond, dir=back];
+  ClinicDatabase -> PatientRecord [taillabel="1", headlabel="0..*", label=" owns"];
+  ClinicDatabase -> Appointment [taillabel="1", headlabel="0..*", label=" owns"];
+  ClinicManager -> ClinicDatabase [label=" 1"];
+  MainWindow -> ClinicManager [label=" 1"];
+  MainWindow -> AppointmentController [label=" 1"];
+
+  // Association
+  edge [arrowtail=none, dir=forward, arrowhead=vee, style=solid];
+  PatientRecord -> Appointment [label=" has 0..* (appointmentIds)", constraint=false];
+  AppointmentController -> ClinicManager [label=" uses"];
+
+  // Dependency (dashed open arrow)
+  edge [style=dashed, arrowhead=vee];
+  ClinicManager -> Sorter [label=" uses"];
+  SearchEngine -> ClinicDatabase [label=" reads"];
+  ReportGenerator -> ClinicDatabase [label=" reads"];
+  AppointmentController -> Appointable [label=" dynamic_cast"];
+  ClinicManager -> Utils [label=" uses"];
+}

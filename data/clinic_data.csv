@@ -1,0 +1,37 @@
+# SCAPMS data file v1
+PATIENT,P0001,General,Adaeze Okafor,21,08031234567,Persistent headache
+PATIENT,P0002,Emergency,Chinedu Eze,34,08052223344,Deep cut on left arm,4
+PATIENT,P0003,Follow-Up,Fatima Bello,45,fatima.bello@mail.com,Hypertension,2026-10-19
+PATIENT,P0004,General,Tunde Adeyemi,19,07061112233,Fever and chills
+PATIENT,P0005,Follow-Up,Ngozi Umeh,52,08099887766,Type 2 diabetes,2026-10-03
+PATIENT,P0006,General,Ibrahim Musa,23,09012345678,Sore throat
+PATIENT,P0007,Emergency,Blessing Ojo,27,08134567890,Severe asthma attack,5
+PATIENT,P0008,General,Emeka Nwosu,20,emeka.nwosu@student.edu.ng,Stomach pain
+PATIENT,P0009,Follow-Up,Aisha Abdullahi,38,08167778899,Malaria treatment review,2026-10-26
+PATIENT,P0010,General,Kelechi Obi,22,07035556677,Skin rash
+PATIENT,P0011,Follow-Up,Funmilayo Akande,60,08023334455,Knee surgery recovery,2026-10-12
+PATIENT,P0012,Emergency,Yusuf Danjuma,41,08176665544,Suspected fracture,3
+PATIENT,P0013,General,Chiamaka Nnadi,18,09098765432,Eye irritation
+PATIENT,P0014,General,Segun Bakare,25,08045671234,Back pain
+PATIENT,P0015,Follow-Up,Halima Garba,33,halima.garba@mail.com,Antenatal check,2026-10-23
+APPT,A0001,P0001,2026-10-23,09:00,Dr. Adebayo,Headache review,Completed
+APPT,A0002,P0001,2026-10-30,10:30,Dr. Adebayo,Headache follow-up,Completed
+APPT,A0003,P0001,2026-11-04,11:00,Dr. Adebayo,Results discussion,Pending
+APPT,A0004,P0003,2026-10-19,08:30,Dr. Okonkwo,Blood pressure check,Completed
+APPT,A0005,P0003,2026-11-02,14:00,Dr. Okonkwo,Blood pressure review,Pending
+APPT,A0006,P0004,2026-10-28,13:00,Dr. Yusuf,Malaria test,Completed
+APPT,A0007,P0004,2026-11-02,09:30,Dr. Yusuf,Fever review,Completed
+APPT,A0008,P0005,2026-10-03,10:00,Dr. Okonkwo,Diabetes check,Completed
+APPT,A0009,P0005,2026-10-18,10:00,Dr. Okonkwo,Blood sugar test,Completed
+APPT,A0010,P0005,2026-11-02,15:30,Dr. Okonkwo,Diabetes review,Pending
+APPT,A0011,P0006,2026-11-02,11:30,Dr. Adebayo,Throat examination,Cancelled
+APPT,A0012,P0008,2026-11-03,09:00,Dr. Yusuf,Stomach pain review,Pending
+APPT,A0013,P0009,2026-10-26,12:00,Dr. Yusuf,Malaria treatment,Completed
+APPT,A0014,P0009,2026-11-05,12:00,Dr. Yusuf,Treatment review,Pending
+APPT,A0015,P0010,2026-11-02,10:00,Dr. Adebayo,Rash check,Completed
+APPT,A0016,P0011,2026-10-12,08:00,Dr. Okonkwo,Post-surgery check,Completed
+APPT,A0017,P0011,2026-11-07,08:00,Dr. Okonkwo,Physiotherapy plan,Pending
+APPT,A0018,P0013,2026-11-02,16:30,Dr. Yusuf,Eye examination,Pending
+APPT,A0019,P0014,2026-10-31,14:00,Dr. Adebayo,Back pain,Cancelled
+APPT,A0020,P0014,2026-11-06,14:00,Dr. Adebayo,Back pain review,Pending
+APPT,A0021,P0015,2026-11-09,09:30,Dr. Okonkwo,Antenatal visit,Pending
